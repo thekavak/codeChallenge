@@ -12,7 +12,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> with BaseState {
   TextEditingController _controller = TextEditingController();
-  bool flag = true; 
+  bool flag = true;
 
   void checkValue() {
     if (_controller.text.isEmpty) {
@@ -29,25 +29,35 @@ class _HomeViewState extends State<HomeView> with BaseState {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: ThemeText.backgroundColor,
-      body: SingleChildScrollView(
-        child: buildSafeArea(context),
-      ),
+      body: getBody(),
     );
   }
 
-  GestureDetector buildSafeArea(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Column(children: <Widget>[
-        buildLogoContainer(context),
-        buildImageContainer(context),
-        buildBottomButtons(context),
-      ]),
-    );
+  Widget getBody() {
+    return Stack(children: <Widget>[
+      GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            children: <Widget>[
+              buildLogoContainer(context),
+              buildImageContainer(context),
+            ],
+          ),
+        ),
+      ),
+      Positioned(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+        left: 0,
+        right: 0,
+        child:    buildBottomButtons(context),
+      ),
+    ]);
   }
 
   Container buildBottomButtons(BuildContext context) {
