@@ -3,7 +3,7 @@
 
 Example:
 
-![](https://github.com/thekavak/codeChallenge/blob/main/challengeapp/assets/intro.gif)
+![](https://github.com/thekavak/codeChallenge/blob/main/challengeapp/assets/intro1.gif)
 
 
 
