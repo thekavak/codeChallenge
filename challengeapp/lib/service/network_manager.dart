@@ -4,23 +4,19 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 
-class ApiiServices{
-
-  static Future<ShrtcodeModel> purchaseHistory(String url) async {
+class ApiServices {
+  static Future<ShrtcodeModel> getShortenUrl(String url) async {
     try {
-      var endpoint = 'shorten?url=${url.toString()}';
-      final response = await http.get(
-        Uri.https(ApplicationConstants.API_URL, endpoint));
-      if (response.statusCode == 200) {
-        print(response.body);
+      var endpoint = 'v2/shorten?url=${url.toString()}';
+      final response =
+          await http.get(Uri.https(ApplicationConstants.apiUrl, endpoint));
+      if (response.statusCode >= 200 || response.statusCode < 300) {
         return ShrtcodeModel.fromJson(json.decode(response.body));
       } else {
         throw json.decode(response.body);
       }
-
     } catch (error) {
       throw error;
     }
   }
-
 }
