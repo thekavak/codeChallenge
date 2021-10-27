@@ -2,18 +2,19 @@ import 'package:challengeapp/constant/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 
-import 'dart:ui';
-
 class ButtonShort extends StatefulWidget {
   const ButtonShort(
       {Key? key,
       this.onPress,
+      required this.heightSize,
+      required this.color,
       required this.buttonText})
       : super(key: key);
 
   final String? buttonText;
   final VoidCallback? onPress;
-
+  final double? heightSize;
+  final Color? color;
 
   @override
   _ButtonShortState createState() => _ButtonShortState();
@@ -27,10 +28,10 @@ class _ButtonShortState extends State<ButtonShort> {
       onPressed: widget.onPress == null ? () {} : widget.onPress!,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: 60,
+        height: widget.heightSize,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
-          color: ThemeText.buttonColor,
+          color: widget.color,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
