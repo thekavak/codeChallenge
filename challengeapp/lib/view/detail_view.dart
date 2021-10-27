@@ -46,50 +46,52 @@ class _DetailPageState extends State<DetailPage> with BaseState {
     });
   }
 
-  ///Apiye gittiğim fonksiyon
+  ///The function I go to the api
   shortenUrl(String Url) async {
     try {
-      ///Dialog u başlattım.
+      ///I started the loading dialog.
       Helper.showLoading();
 
       data = await ApiServices.getShortenUrl(Url.toString());
-      ///apiden gelen responsun data.ok == true ise
-      ///bunu geciçi olarak tuttuğum listeye ekledim.
+      ///If your response from api is data.ok == true
+      ///I've added this to my temporary list.
       if (data!.ok == true) {
         setState(() {
           widget.dataList!.add(data!);
         });
         // textfield alanını temizledim.
-          controller.clear();
+        controller.clear();
         Helper.hideLoading();
       } else {
         Helper.hideLoading();
-        /// Apiden doğru sonuç işlemler sırasında hata olursa
+        /// If there is an error during other operations when the correct result is received from the API
         Helper.showToastFunc(stringConstant.somethinqError, context,ThemeText.bottomBoxColor, ThemeText.buttomTextOpenSans);
       }
     } catch (e) {
       Helper.hideLoading();
-      /// Api network kaynaklı bir soruna karşı ekledim
+      /// I added it against an api network-related problem.
       Helper.showToastFunc(stringConstant.apiError, context,  ThemeText.bottomBoxColor, ThemeText.buttomTextOpenSans);
       throw e;
+
     }
+    ///I added it to close the keyboard after the response came.
+    FocusScope.of(context).unfocus();
   }
 
-  ///Flag : kutu eğer boş ise kutu içerisinde kırmızı ile
-  ///error mesajı göstermez için 'Please add a link here'
+  ///Flag : 'Please add a link here' to show an error message in red if the box is empty inside
   isValueUrl() async {
     if (controller.text.isEmpty) {
       setState(() {
         flag = false;
       });
     } else {
-      ///Girilen değerin Url olup olmadığını bulmak için
-      ///Regex kütüphanesi kullandım
+      ///To find out if the entered value is a Url
+      ///I used regex library
       if (!controller.text.isUrl()) {
         Helper.showToastFunc(stringConstant.urlFormat, context,
             ThemeText.bottomBoxColor, ThemeText.buttomTextOpenSans);
       } else {
-        ///Burada hem url hem boş değil ise api fonksiyonuna gönderdim.
+        ///Here both the url and if it's not empty, send it to the above function.
         await shortenUrl(controller.text);
         setState(() {
           flag = true;
@@ -112,39 +114,39 @@ class _DetailPageState extends State<DetailPage> with BaseState {
     return Stack(children: <Widget>[
       GestureDetector(
         onTap: () {
-          ///Klavye açıkken herhangi boş bir alana tıkladığında kapanması için
+          ///When the keyboard is open, clicking any blank area to close it.
           FocusScope.of(context).unfocus();
         },
         child:Container(
-            height: MediaQuery.of(context).size.height ,
-            padding: EdgeInsets.only(
-                bottom: (MediaQuery.of(context).size.height * 0.30)),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  ///Title oluşturdum
-                  buildPageTitle(context),
-                  widget.dataList!.isEmpty == true
-                      ? buildEmptyList() ///Eğer liste boş ise
-                      : Column(
-                    ///Listemi ters çevirip burada ekrana bastım
-                          children: widget.dataList!.reversed
-                              .map((e) {
-                          return buildItemBox(context, e);
-                        }).toList()),
-                ],
-              ),
+          height: MediaQuery.of(context).size.height ,
+          padding: EdgeInsets.only(
+              bottom: (MediaQuery.of(context).size.height * 0.30)),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                ///I created a title
+                buildPageTitle(context),
+                widget.dataList!.isEmpty == true
+                    ? buildEmptyList() ///If the list is empty
+                    : Column(
+                  ///reversed the list and pressed the screen here
+                    children: widget.dataList!.reversed
+                        .map((e) {
+                      return buildItemBox(context, e);
+                    }).toList()),
+              ],
             ),
+          ),
         ),
       ),
-      ///BottomFixed Url textfield kısmı
+      ///BottomFixed Url textfield part
       Positioned(
         bottom: MediaQuery.of(context).viewInsets.bottom,
         left: 0,
         right: 0,
-        ///Flag: boş olmasına karşı gönderdiğim true false değeri
-        ///Controller bu sayfadaki textfield ın controlleri
-        ///isValueUrl methodum.
+        ///Flag: The true false value I sent against being empty
+        ///Controller : Controller of the textfield on this page
+        ///isValueUrl: my method.
         child: BottomButton(
           flag: flag,
           controller: controller,
@@ -158,7 +160,7 @@ class _DetailPageState extends State<DetailPage> with BaseState {
     return Container(
       height: MediaQuery.of(context).size.height * 0.1,
       padding:
-          EdgeInsets.only(top: (MediaQuery.of(context).size.height * 0.05)),
+      EdgeInsets.only(top: (MediaQuery.of(context).size.height * 0.05)),
       child: Text(
         stringConstant.urlListText.toString(),
         textAlign: TextAlign.center,

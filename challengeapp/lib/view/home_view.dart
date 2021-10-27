@@ -32,8 +32,8 @@ class _HomeViewState extends State<HomeView> with BaseState {
     readJson();
   }
 
-  ///İlk başta elimde 2 tane data olmasını istedim
-  ///Local json olarak tuttum.
+  ///At first I wanted to have 2 data in my hand,
+  ///I kept it as local json..
   Future<void> readJson() async {
     try {
       final String response = await rootBundle.loadString('assets/list.json');
@@ -49,60 +49,61 @@ class _HomeViewState extends State<HomeView> with BaseState {
     }
   }
 
-  ///Apiye gittiğim fonksiyon
+  ///Api Function
   shortenUrl(String Url) async {
     try {
-      ///Dialog u başlattım.
+      ///I started the loading dialog.
       Helper.showLoading();
 
       data = await ApiServices.getShortenUrl(Url.toString());
-      ///apiden gelen responsun data.ok == true ise
-      ///bunu geciçi olarak tuttuğum listeye ekledim.
+      ///If your response from api is data.ok == true
+      ///I've added this to my temporary list.
       if (data!.ok == true) {
         setState(() {
           jsonList.add(data!);
         });
 
-        ///Elimdeki listeyi listeleme sayfasına arguman olarak yolladımç
+        ///I sent the list I have to the listing page as an argument.
         Navigator.of(context)
             .push(MaterialPageRoute<Null>(
-                builder: (BuildContext context) {
-                  return DetailPage(dataList: jsonList);
-                },
-                fullscreenDialog: true))
+            builder: (BuildContext context) {
+              return DetailPage(dataList: jsonList);
+            },
+            fullscreenDialog: true))
             .then((value) {
-              ///Geri butonuna basar textfield alanını temizledim.
+          ///I cleared the textfield when pressing the back button.
           controller.clear();
         });
         Helper.hideLoading();
       } else {
         Helper.hideLoading();
-        /// Apiden doğru sonuç işlemler sırasında hata olursa
+        /// If there is an error during other operations when the correct result is received from the API
+
         Helper.showToastFunc(stringConstant.somethinqError, context,ThemeText.bottomBoxColor, ThemeText.buttomTextOpenSans);
       }
     } catch (e) {
       Helper.hideLoading();
-      /// Api network kaynaklı bir soruna karşı ekledim
+      /// I added it against an api network-related problem.
+
       Helper.showToastFunc(stringConstant.apiError, context,  ThemeText.bottomBoxColor, ThemeText.buttomTextOpenSans);
       throw e;
     }
   }
 
-  ///Flag : kutu eğer boş ise kutu içerisinde kırmızı ile
-  ///error mesajı göstermez için 'Please add a link here'
+  ///Flag : 'Please add a link here' to show an error message in red if the box is empty inside
   isValueUrl() async {
     if (controller.text.isEmpty) {
       setState(() {
         flag = false;
       });
     } else {
-      ///Girilen değerin Url olup olmadığını bulmak için
-      ///Regex kütüphanesi kullandım
+      ///To find out if the entered value is a Url
+      ///I used regex library
       if (!controller.text.isUrl()) {
         Helper.showToastFunc(stringConstant.urlFormat, context,
             ThemeText.bottomBoxColor, ThemeText.buttomTextOpenSans);
       } else {
-        ///Burada hem url hem boş değil ise api fonksiyonuna gönderdim.
+        ///Here both the url and if it's not empty, send it to the above function.
         await shortenUrl(controller.text);
         setState(() {
           flag = true;
@@ -130,29 +131,29 @@ class _HomeViewState extends State<HomeView> with BaseState {
     return Stack(children: <Widget>[
       GestureDetector(
         onTap: () {
-          ///Klavye açıkken herhangi boş bir alana tıkladığında kapanması için
+          ///When the keyboard is open, clicking any blank area to close it.
           FocusScope.of(context).unfocus();
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: <Widget>[
-              ///Logo Oluşturuyor
+              ///Creating a Logo
               buildLogoContainer(context),
-              ///Image Oluşturuyor
+              ///Creating a Image
               buildImageContainer(context),
             ],
           ),
         ),
       ),
-      ///BottomFixed Url textfield kısmı
+      ///BottomFixed Url textfield part
       Positioned(
         bottom: MediaQuery.of(context).viewInsets.bottom,
         left: 0,
         right: 0,
-        ///Flag: boş olmasına karşı gönderdiğim true false değeri
-        ///Controller bu sayfadaki textfield ın controlleri
-        ///isValueUrl methodum.
+        ///Flag: The true false value I sent against being empty
+        ///Controller : Controller of the textfield on this page
+        ///isValueUrl: my method.
         child: BottomButton(flag: flag,controller: controller,onPress: isValueUrl,),
       ),
     ]);
@@ -191,7 +192,7 @@ class _HomeViewState extends State<HomeView> with BaseState {
       height: MediaQuery.of(context).size.height * 0.17,
       child: Container(
         padding:
-            EdgeInsets.only(top: (MediaQuery.of(context).size.height * 0.1)),
+        EdgeInsets.only(top: (MediaQuery.of(context).size.height * 0.1)),
         child: SvgPicture.asset(
           stringConstant.logoPath,
           width: 150,

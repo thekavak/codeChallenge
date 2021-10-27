@@ -41,7 +41,7 @@ class _BottomButtonState extends State<BottomButton> with BaseState {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ///Flag ı burada hint kısmında text i ve rengi değiştirmek için kullandım.
+              ///I used Flag here to change the text and color in the hint part.
               Container(
                 width: MediaQuery.of(context).size.width * 0.7,
                 child: TextField(

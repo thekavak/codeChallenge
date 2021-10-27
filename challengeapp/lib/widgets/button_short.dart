@@ -23,8 +23,7 @@ class ButtonShort extends StatefulWidget {
 class _ButtonShortState extends State<ButtonShort> {
   @override
   Widget build(BuildContext context) {
-    ///Bounce kitaphanesini ekledim
-    ///tıklayınca küçülüp büyümesi -animasyon için
+   /// I added the Bounce library, it shrinks and grows on click - for animation
     return Bounce(
       duration:const Duration(milliseconds: 110),
       onPressed: widget.onPress == null ? () {} : widget.onPress!,

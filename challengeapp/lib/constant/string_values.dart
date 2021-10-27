@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-///Bütün kullandığım string valueler
+///All the string values I use
 class StringConstant {
   static StringConstant instance = StringConstant._init();
 
