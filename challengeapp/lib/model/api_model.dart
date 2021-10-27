@@ -22,6 +22,7 @@ class ShrtcodeModel {
     "ok": ok,
     "result": result!.toJson(),
   };
+
 }
 
 class Result {
@@ -34,6 +35,7 @@ class Result {
     this.shareLink,
     this.fullShareLink,
     this.originalLink,
+    this.copied,
   });
 
   String? code;
@@ -44,6 +46,7 @@ class Result {
   String? shareLink;
   String? fullShareLink;
   String? originalLink;
+  bool? copied;
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
     code: json["code"],
@@ -54,6 +57,7 @@ class Result {
     shareLink: json["share_link"],
     fullShareLink: json["full_share_link"],
     originalLink: json["original_link"],
+    copied: false,
   );
 
   Map<String, dynamic> toJson() => {
@@ -65,5 +69,6 @@ class Result {
     "share_link": shareLink,
     "full_share_link": fullShareLink,
     "original_link": originalLink,
+    "copied": copied,
   };
 }
