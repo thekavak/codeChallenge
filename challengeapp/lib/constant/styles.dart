@@ -37,4 +37,15 @@ abstract class ThemeText {
     color: whiteColor,
     fontWeight: FontWeight.bold,
   );
+  static TextStyle urlListOpenSans = GoogleFonts.openSans(
+    color: blackColor,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+  );
+  static TextStyle urlListEmptyOpenSans = GoogleFonts.openSans(
+    color: greyColor,
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+  );
+
 }
