@@ -7,13 +7,11 @@ import 'package:challengeapp/core/base/base_state.dart';
 import 'package:challengeapp/model/api_model.dart';
 import 'package:challengeapp/service/network_manager.dart';
 import 'package:challengeapp/widgets/button_bottom.dart';
-import 'package:challengeapp/widgets/button_short.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:regexpattern/regexpattern.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'detail_view.dart';
 
@@ -34,6 +32,8 @@ class _HomeViewState extends State<HomeView> with BaseState {
     readJson();
   }
 
+  ///İlk başta elimde 2 tane data olmasını istedim
+  ///Local json olarak tuttum.
   Future<void> readJson() async {
     try {
       final String response = await rootBundle.loadString('assets/list.json');
@@ -49,16 +49,21 @@ class _HomeViewState extends State<HomeView> with BaseState {
     }
   }
 
+  ///Apiye gittiğim fonksiyon
   shortenUrl(String Url) async {
     try {
+      ///Dialog u başlattım.
       Helper.showLoading();
 
       data = await ApiServices.getShortenUrl(Url.toString());
+      ///apiden gelen responsun data.ok == true ise
+      ///bunu geciçi olarak tuttuğum listeye ekledim.
       if (data!.ok == true) {
         setState(() {
           jsonList.add(data!);
         });
 
+        ///Elimdeki listeyi listeleme sayfasına arguman olarak yolladımç
         Navigator.of(context)
             .push(MaterialPageRoute<Null>(
                 builder: (BuildContext context) {
@@ -66,30 +71,38 @@ class _HomeViewState extends State<HomeView> with BaseState {
                 },
                 fullscreenDialog: true))
             .then((value) {
+              ///Geri butonuna basar textfield alanını temizledim.
           controller.clear();
         });
         Helper.hideLoading();
       } else {
         Helper.hideLoading();
+        /// Apiden doğru sonuç işlemler sırasında hata olursa
         Helper.showToastFunc(stringConstant.somethinqError, context,ThemeText.bottomBoxColor, ThemeText.buttomTextOpenSans);
       }
     } catch (e) {
       Helper.hideLoading();
+      /// Api network kaynaklı bir soruna karşı ekledim
       Helper.showToastFunc(stringConstant.apiError, context,  ThemeText.bottomBoxColor, ThemeText.buttomTextOpenSans);
       throw e;
     }
   }
 
+  ///Flag : kutu eğer boş ise kutu içerisinde kırmızı ile
+  ///error mesajı göstermez için 'Please add a link here'
   isValueUrl() async {
     if (controller.text.isEmpty) {
       setState(() {
         flag = false;
       });
     } else {
+      ///Girilen değerin Url olup olmadığını bulmak için
+      ///Regex kütüphanesi kullandım
       if (!controller.text.isUrl()) {
         Helper.showToastFunc(stringConstant.urlFormat, context,
             ThemeText.bottomBoxColor, ThemeText.buttomTextOpenSans);
       } else {
+        ///Burada hem url hem boş değil ise api fonksiyonuna gönderdim.
         await shortenUrl(controller.text);
         setState(() {
           flag = true;
@@ -117,22 +130,29 @@ class _HomeViewState extends State<HomeView> with BaseState {
     return Stack(children: <Widget>[
       GestureDetector(
         onTap: () {
+          ///Klavye açıkken herhangi boş bir alana tıkladığında kapanması için
           FocusScope.of(context).unfocus();
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: <Widget>[
+              ///Logo Oluşturuyor
               buildLogoContainer(context),
+              ///Image Oluşturuyor
               buildImageContainer(context),
             ],
           ),
         ),
       ),
+      ///BottomFixed Url textfield kısmı
       Positioned(
         bottom: MediaQuery.of(context).viewInsets.bottom,
         left: 0,
         right: 0,
+        ///Flag: boş olmasına karşı gönderdiğim true false değeri
+        ///Controller bu sayfadaki textfield ın controlleri
+        ///isValueUrl methodum.
         child: BottomButton(flag: flag,controller: controller,onPress: isValueUrl,),
       ),
     ]);

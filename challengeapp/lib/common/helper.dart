@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
 class Helper {
+  ///Toast Message
   static showToastFunc(String? message, BuildContext? context, Color color,
       TextStyle? textStyle) {
     showToast(message!,

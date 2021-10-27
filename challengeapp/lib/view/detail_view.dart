@@ -46,39 +46,50 @@ class _DetailPageState extends State<DetailPage> with BaseState {
     });
   }
 
-
+  ///Apiye gittiğim fonksiyon
   shortenUrl(String Url) async {
     try {
+      ///Dialog u başlattım.
       Helper.showLoading();
 
       data = await ApiServices.getShortenUrl(Url.toString());
+      ///apiden gelen responsun data.ok == true ise
+      ///bunu geciçi olarak tuttuğum listeye ekledim.
       if (data!.ok == true) {
         setState(() {
           widget.dataList!.add(data!);
         });
+        // textfield alanını temizledim.
           controller.clear();
         Helper.hideLoading();
       } else {
         Helper.hideLoading();
+        /// Apiden doğru sonuç işlemler sırasında hata olursa
         Helper.showToastFunc(stringConstant.somethinqError, context,ThemeText.bottomBoxColor, ThemeText.buttomTextOpenSans);
       }
     } catch (e) {
       Helper.hideLoading();
+      /// Api network kaynaklı bir soruna karşı ekledim
       Helper.showToastFunc(stringConstant.apiError, context,  ThemeText.bottomBoxColor, ThemeText.buttomTextOpenSans);
       throw e;
     }
   }
 
+  ///Flag : kutu eğer boş ise kutu içerisinde kırmızı ile
+  ///error mesajı göstermez için 'Please add a link here'
   isValueUrl() async {
     if (controller.text.isEmpty) {
       setState(() {
         flag = false;
       });
     } else {
+      ///Girilen değerin Url olup olmadığını bulmak için
+      ///Regex kütüphanesi kullandım
       if (!controller.text.isUrl()) {
         Helper.showToastFunc(stringConstant.urlFormat, context,
             ThemeText.bottomBoxColor, ThemeText.buttomTextOpenSans);
       } else {
+        ///Burada hem url hem boş değil ise api fonksiyonuna gönderdim.
         await shortenUrl(controller.text);
         setState(() {
           flag = true;
@@ -99,29 +110,41 @@ class _DetailPageState extends State<DetailPage> with BaseState {
 
   Widget getBody() {
     return Stack(children: <Widget>[
-      SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height ,
-          padding: EdgeInsets.only(
-              bottom: (MediaQuery.of(context).size.height * 0.30)),
-          child: Column(
-            children: [
-              buildPageTitle(context),
-              widget.dataList!.isEmpty == true
-                  ? buildEmptyList()
-                  : Column(
-                      children: widget.dataList!.reversed
-                          .map((e) {
-                      return buildItemBox(context, e);
-                    }).toList()),
-            ],
-          ),
+      GestureDetector(
+        onTap: () {
+          ///Klavye açıkken herhangi boş bir alana tıkladığında kapanması için
+          FocusScope.of(context).unfocus();
+        },
+        child:Container(
+            height: MediaQuery.of(context).size.height ,
+            padding: EdgeInsets.only(
+                bottom: (MediaQuery.of(context).size.height * 0.30)),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ///Title oluşturdum
+                  buildPageTitle(context),
+                  widget.dataList!.isEmpty == true
+                      ? buildEmptyList() ///Eğer liste boş ise
+                      : Column(
+                    ///Listemi ters çevirip burada ekrana bastım
+                          children: widget.dataList!.reversed
+                              .map((e) {
+                          return buildItemBox(context, e);
+                        }).toList()),
+                ],
+              ),
+            ),
         ),
       ),
+      ///BottomFixed Url textfield kısmı
       Positioned(
         bottom: MediaQuery.of(context).viewInsets.bottom,
         left: 0,
         right: 0,
+        ///Flag: boş olmasına karşı gönderdiğim true false değeri
+        ///Controller bu sayfadaki textfield ın controlleri
+        ///isValueUrl methodum.
         child: BottomButton(
           flag: flag,
           controller: controller,

@@ -41,7 +41,6 @@ dependencies:
   keyboard_attachable: ^2.0.1
   regexpattern: ^2.0.1
   flutter_styled_toast: ^2.0.0
-  shared_preferences: ^2.0.8
   flutter_easyloading: ^3.0.3
 
 dev_dependencies:

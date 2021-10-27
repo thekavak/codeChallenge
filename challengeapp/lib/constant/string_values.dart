@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
+///Bütün kullandığım string valueler
 class StringConstant {
   static StringConstant instance = StringConstant._init();
 
   StringConstant._init();
-
   final String letsGetStarted = 'Let\'s Get Started!';
   final String letsGetStartedDesc = 'Paste your fisrt link into \nthe field to shorten it';
   final String textFieldHint = 'Shorten a link here...';

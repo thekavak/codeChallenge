@@ -23,8 +23,10 @@ class ButtonShort extends StatefulWidget {
 class _ButtonShortState extends State<ButtonShort> {
   @override
   Widget build(BuildContext context) {
+    ///Bounce kitaphanesini ekledim
+    ///tıklayınca küçülüp büyümesi -animasyon için
     return Bounce(
-      duration: Duration(milliseconds: 110),
+      duration:const Duration(milliseconds: 110),
       onPressed: widget.onPress == null ? () {} : widget.onPress!,
       child: Container(
         width: MediaQuery.of(context).size.width,
