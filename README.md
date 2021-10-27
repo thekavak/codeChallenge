@@ -1,4 +1,12 @@
 
+# Shortly Code Challenge
+
+Example:
+
+![](https://github.com/thekavak/codeChallenge/blob/main/challengeapp/assets/app_intro.gif)
+
+
+
 - First, I created the folder structure. 
   - Constant
   - Core
