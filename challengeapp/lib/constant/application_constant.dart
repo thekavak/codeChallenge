@@ -1,3 +1,3 @@
 class ApplicationConstants {
-  static const API_URL = "api.shrtco.de/v2";
+  static const apiUrl = "api.shrtco.de";
 }
